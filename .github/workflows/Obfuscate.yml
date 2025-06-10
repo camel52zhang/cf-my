@@ -34,6 +34,10 @@ jobs:
           wget https://raw.githubusercontent.com/camel52zhang/my_tro/refs/heads/main/_worker.js
           mv _worker.js origin.js
 
+      - name: Clean existing obfuscated files  # 新增清理步骤
+        run: |
+          rm -f _worker.js*
+
       - name: Obfuscate my_tro worker js
         run: |
           javascript-obfuscator origin.js --output _worker.js \
@@ -45,7 +49,8 @@ jobs:
           --string-array-threshold 0.75 \
           --transform-object-keys true \
           --self-defending false \
-          --simplify true
+          --simplify true \
+          --overwrite  # 关键修复：添加覆盖选项
 
       - name: 提交更改
         uses: stefanzweifel/git-auto-commit-action@v5
